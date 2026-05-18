@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tugas Saya</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0e17;
+  --surface:#1a1927;
+  --surface2:#231f35;
+  --border:#2e2a44;
+  --text:#f5f3ff;
+  --muted:#7b7699;
+  --accent:#a78bfa;
+  --accent2:#6d28d9;
+  --danger:#f87171;
+  --warning:#fbbf24;
+  --success:#34d399;
+  --yellow:#fde68a;
+}
+body{
+  font-family:'Instrument Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding:2rem 1rem 5rem;
+}
+.wrap{max-width:680px;margin:0 auto}
+ 
+/* HEADER */
+.header{margin-bottom:2.5rem}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.brand{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;line-height:1;letter-spacing:-0.03em;color:var(--text)}
+.brand em{color:var(--accent);font-style:normal}
+.today-badge{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:6px 16px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap;margin-top:8px}
+ 
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:1.5rem 0}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 12px;text-align:center}
+.stat-box .n{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:700;line-height:1}
+.stat-box .lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.n-all{color:var(--text)}
+.n-active{color:var(--warning)}
+.n-done{color:var(--success)}
+.n-over{color:var(--danger)}
+ 
+/* PROGRESS */
+.prog-wrap{margin-bottom:1.8rem}
+.prog-labels{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.prog-track{height:5px;background:var(--border);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+ 
+/* FORM */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px;margin-bottom:1.5rem}
+.form-card h2{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.field-full{margin-bottom:10px}
+label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=date],select{
+  width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:14px;padding:10px 14px;
+  outline:none;transition:border-color .18s;
+}
+input[type=text]:focus,input[type=date]:focus,select:focus{border-color:var(--accent)}
+input[type=text]::placeholder{color:var(--muted)}
+select option{background:var(--surface2)}
+input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.5);cursor:pointer}
+ 
+.add-btn{
+  width:100%;margin-top:4px;padding:12px;border:none;border-radius:12px;
+  background:var(--accent);color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:.06em;cursor:pointer;transition:background .18s,transform .1s;
+}
+.add-btn:hover{background:var(--accent2)}
+.add-btn:active{transform:scale(.98)}
+ 
+/* FILTER */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.ftab{
+  font-size:12px;font-weight:500;letter-spacing:.06em;padding:6px 14px;border-radius:99px;
+  border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .18s;
+}
+.ftab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ftab:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+ 
+/* ACTION ROW */
+.action-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}
+.sort-select{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;padding:5px 10px;cursor:pointer;outline:none}
+.sort-select:focus{border-color:var(--accent)}
+.clr-btn{background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;padding:5px 10px;border-radius:8px;transition:color .15s,background .15s}
+.clr-btn:hover{color:var(--danger);background:rgba(248,113,113,.08)}
+ 
+/* TASK CARDS */
+.task-list{display:flex;flex-direction:column;gap:10px}
+.tcard{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:16px 18px;display:flex;gap:14px;align-items:flex-start;
+  transition:transform .18s,border-color .18s;animation:pop .22s ease-out;
+}
+@keyframes pop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.tcard:hover{transform:translateY(-2px);border-color:var(--accent2)}
+.tcard.done{opacity:.5}
+.tcard.done .t-name{text-decoration:line-through;color:var(--muted)}
+.tcard.overdue{border-color:rgba(248,113,113,.35);background:rgba(248,113,113,.04)}
+ 
+/* Priority border */
+.tcard[data-p=tinggi]{border-left:3px solid var(--danger)}
+.tcard[data-p=sedang]{border-left:3px solid var(--warning)}
+.tcard[data-p=rendah]{border-left:3px solid var(--success)}
+ 
+.chk{
+  width:22px;height:22px;min-width:22px;border-radius:50%;
+  border:1.5px solid var(--border);background:transparent;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;margin-top:2px;
+}
+.chk:hover{border-color:var(--success)}
+.chk.checked{background:var(--success);border-color:var(--success)}
+.chk.checked::after{content:'✓';color:#0f0e17;font-size:12px;font-weight:700}
+ 
+.t-body{flex:1;min-width:0}
+.t-name{font-size:15px;font-weight:500;margin-bottom:5px;line-height:1.4}
+.t-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.badge{font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:99px;font-weight:500;border:1px solid}
+.b-mapel{background:rgba(167,139,250,.1);color:var(--accent);border-color:rgba(167,139,250,.3)}
+.b-p-tinggi{background:rgba(248,113,113,.12);color:var(--danger);border-color:rgba(248,113,113,.3)}
+.b-p-sedang{background:rgba(251,191,36,.12);color:var(--warning);border-color:rgba(251,191,36,.3)}
+.b-p-rendah{background:rgba(52,211,153,.12);color:var(--success);border-color:rgba(52,211,153,.3)}
+.deadline-txt{font-size:11px;color:var(--muted);margin-top:1px}
+.deadline-txt.soon{color:var(--warning)}
+.deadline-txt.over{color:var(--danger)}
+ 
+.del-btn{background:none;border:none;font-size:18px;color:var(--border);cursor:pointer;padding:2px;transition:color .15s;line-height:1;margin-top:1px}
+.del-btn:hover{color:var(--danger)}
+ 
+/* Empty */
+.empty{text-align:center;padding:3.5rem 1rem;color:var(--muted)}
+.empty-icon{font-size:3rem;margin-bottom:1rem;opacity:.4}
+.empty p{font-size:14px;font-weight:300}
+ 
+/* SECTION HEAD */
+.section-head{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:1.5rem 0 .7rem;padding-left:4px;border-left:3px solid var(--accent);padding-left:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+ 
+  <div class="header">
+    <div class="header-top">
+      <h1 class="brand">Tugas<br><em>Saya</em></h1>
+      <div class="today-badge" id="today-badge"></div>
+    </div>
+  </div>
+ 
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-box"><div class="n n-all" id="s-total">0</div><div class="lbl">Total</div></div>
+    <div class="stat-box"><div class="n n-active" id="s-active">0</div><div class="lbl">Aktif</div></div>
+    <div class="stat-box"><div class="n n-done" id="s-done">0</div><div class="lbl">Selesai</div></div>
+    <div class="stat-box"><div class="n n-over" id="s-over">0</div><div class="lbl">Terlambat</div></div>
+  </div>
+ 
+  <!-- PROGRESS -->
+  <div class="prog-wrap">
+    <div class="prog-labels"><span>Progress Tugas</span><span id="pct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+ 
+  <!-- FORM -->
+  <div class="form-card">
+    <h2>+ Tambah Tugas</h2>
+    <div class="field-full">
+      <label for="t-nama">Nama Tugas</label>
+      <input type="text" id="t-nama" placeholder="cth: Mengerjakan soal matematika bab 3…" maxlength="120">
+    </div>
+    <div class="field-row">
+      <div>
+        <label for="t-mapel">Mata Pelajaran / Mata Kuliah</label>
+        <select id="t-mapel">
+          <option value="Umum">📚 Umum</option>
+          <option value="Matematika">📐 Matematika</option>
+          <option value="Bahasa Indonesia">📖 Bahasa Indonesia</option>
+          <option value="Bahasa Inggris">🌍 Bahasa Inggris</option>
+          <option value="IPA / Sains">🔬 IPA / Sains</option>
+          <option value="IPS">🗺️ IPS</option>
+          <option value="Fisika">⚡ Fisika</option>
+          <option value="Kimia">🧪 Kimia</option>
+          <option value="Biologi">🌿 Biologi</option>
+          <option value="Sejarah">📜 Sejarah</option>
+          <option value="Seni">🎨 Seni</option>
+          <option value="Olahraga">⚽ Olahraga</option>
+          <option value="TIK / Komputer">💻 TIK / Komputer</option>
+          <option value="Agama">🕌 Agama</option>
+          <option value="PKN">🏛️ PKN</option>
+        </select>
+      </div>
+      <div>
+        <label for="t-prio">Prioritas</label>
+        <select id="t-prio">
+          <option value="sedang">🟠 Sedang</option>
+          <option value="tinggi">🔴 Tinggi</option>
+          <option value="rendah">🟢 Rendah</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div>
+        <label for="t-deadline">Deadline / Tenggat</label>
+        <input type="date" id="t-deadline">
+      </div>
+      <div>
+        <label for="t-jenis">Jenis Tugas</label>
+        <select id="t-jenis">
+          <option value="PR">📝 PR / Latihan</option>
+          <option value="Ujian">📋 Ujian / Ulangan</option>
+          <option value="Proyek">🛠️ Proyek</option>
+          <option value="Presentasi">🎤 Presentasi</option>
+          <option value="Laporan">📄 Laporan</option>
+          <option value="Baca">📚 Baca Materi</option>
+        </select>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addTask()">Tambah Tugas</button>
+  </div>
+ 
+  <!-- FILTER -->
+  <div class="filter-row">
+    <button class="ftab active" onclick="setF('all',this)">Semua</button>
+    <button class="ftab" onclick="setF('active',this)">Aktif</button>
+    <button class="ftab" onclick="setF('done',this)">Selesai</button>
+    <button class="ftab" onclick="setF('overdue',this)">⚠️ Terlambat</button>
+    <button class="ftab" onclick="setF('tinggi',this)">🔴 Prioritas Tinggi</button>
+  </div>
+ 
+  <div class="action-row">
+    <select class="sort-select" id="sort-sel" onchange="render()">
+      <option value="created">Terbaru</option>
+      <option value="deadline">Tenggat Terdekat</option>
+      <option value="priority">Prioritas</option>
+    </select>
+    <button class="clr-btn" onclick="clearDone()">Hapus yang selesai</button>
+  </div>
+ 
+  <!-- LIST -->
+  <div class="task-list" id="task-list"></div>
+</div>
+ 
+<script>
+const KEY='tugas_saya_v2';
+let tasks=JSON.parse(localStorage.getItem(KEY)||'[]');
+let filt='all';
+ 
+function save(){localStorage.setItem(KEY,JSON.stringify(tasks))}
+ 
+function setF(f,btn){
+  filt=f;
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+ 
+function isOverdue(t){
+  if(!t.deadline||t.done)return false;
+  return new Date(t.deadline)<new Date(new Date().toDateString());
+}
+ 
+function deadlineTxt(t){
+  if(!t.deadline)return '';
+  const d=new Date(t.deadline);
+  const today=new Date(new Date().toDateString());
+  const diff=Math.round((d-today)/(1000*60*60*24));
+  const fmt=d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+  if(t.done)return `<span class="deadline-txt">📅 ${fmt}</span>`;
+  if(diff<0)return `<span class="deadline-txt over">⛔ Terlambat ${Math.abs(diff)} hari — ${fmt}</span>`;
+  if(diff===0)return `<span class="deadline-txt soon">🔥 Hari ini! — ${fmt}</span>`;
+  if(diff<=3)return `<span class="deadline-txt soon">⚡ ${diff} hari lagi — ${fmt}</span>`;
+  return `<span class="deadline-txt">📅 ${diff} hari lagi — ${fmt}</span>`;
+}
+ 
+function prioBadge(p){
+  return `<span class="badge b-p-${p}">${{tinggi:'🔴 Tinggi',sedang:'🟠 Sedang',rendah:'🟢 Rendah'}[p]||p}</span>`;
+}
+ 
+function addTask(){
+  const nama=document.getElementById('t-nama').value.trim();
+  if(!nama){document.getElementById('t-nama').focus();return;}
+  tasks.unshift({
+    id:Date.now(),
+    nama,
+    mapel:document.getElementById('t-mapel').value,
+    prio:document.getElementById('t-prio').value,
+    jenis:document.getElementById('t-jenis').value,
+    deadline:document.getElementById('t-deadline').value,
+    done:false,
+    created:Date.now()
+  });
+  document.getElementById('t-nama').value='';
+  save();render();
+}
+ 
+function toggle(id){
+  const t=tasks.find(x=>x.id===id);
+  if(t){t.done=!t.done;save();render();}
+}
+ 
+function del(id){
+  tasks=tasks.filter(x=>x.id!==id);
+  save();render();
+}
+ 
+function clearDone(){tasks=tasks.filter(x=>!x.done);save();render();}
+ 
+function render(){
+  const total=tasks.length;
+  const done=tasks.filter(x=>x.done).length;
+  const active=tasks.filter(x=>!x.done).length;
+  const over=tasks.filter(isOverdue).length;
+  const pct=total?Math.round(done/total*100):0;
+ 
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-active').textContent=active;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('s-over').textContent=over;
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+ 
+  const sort=document.getElementById('sort-sel').value;
+  let list=[...tasks];
+ 
+  if(filt==='active')list=list.filter(x=>!x.done);
+  else if(filt==='done')list=list.filter(x=>x.done);
+  else if(filt==='overdue')list=list.filter(isOverdue);
+  else if(filt==='tinggi')list=list.filter(x=>x.prio==='tinggi');
+ 
+  if(sort==='deadline')list.sort((a,b)=>{if(!a.deadline)return 1;if(!b.deadline)return -1;return new Date(a.deadline)-new Date(b.deadline);});
+  else if(sort==='priority'){const o={tinggi:0,sedang:1,rendah:2};list.sort((a,b)=>o[a.prio]-o[b.prio]);}
+  else list.sort((a,b)=>b.created-a.created);
+ 
+  const el=document.getElementById('task-list');
+ 
+  if(!list.length){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><p>${filt==='done'?'Belum ada tugas yang selesai.':'Tidak ada tugas ditemukan. Yay!'}</p></div>`;
+    return;
+  }
+ 
+  // Group: overdue / hari ini / mendatang / selesai
+  const groups={overdue:[],today:[],upcoming:[],done:[]};
+  list.forEach(t=>{
+    if(t.done){groups.done.push(t);return;}
+    if(isOverdue(t)){groups.overdue.push(t);return;}
+    if(t.deadline){
+      const diff=Math.round((new Date(t.deadline)-new Date(new Date().toDateString()))/(864e5));
+      if(diff===0){groups.today.push(t);return;}
+    }
+    groups.upcoming.push(t);
+  });
+ 
+  let html='';
+  if(groups.overdue.length){html+=`<div class="section-head">⛔ Terlambat (${groups.overdue.length})</div>`;html+=groups.overdue.map(cardHtml).join('');}
+  if(groups.today.length){html+=`<div class="section-head">🔥 Hari Ini (${groups.today.length})</div>`;html+=groups.today.map(cardHtml).join('');}
+  if(groups.upcoming.length){html+=`<div class="section-head">📋 Mendatang (${groups.upcoming.length})</div>`;html+=groups.upcoming.map(cardHtml).join('');}
+  if(groups.done.length&&(filt==='all'||filt==='done')){html+=`<div class="section-head">✅ Selesai (${groups.done.length})</div>`;html+=groups.done.map(cardHtml).join('');}
+ 
+  el.innerHTML=html;
+}
+ 
+function cardHtml(t){
+  const ov=isOverdue(t)?'overdue':'';
+  return `<div class="tcard ${t.done?'done':''} ${ov}" data-p="${t.prio}">
+    <button class="chk ${t.done?'checked':''}" onclick="toggle(${t.id})" aria-label="Toggle selesai"></button>
+    <div class="t-body">
+      <div class="t-name">${esc(t.nama)}</div>
+      <div class="t-meta">
+        <span class="badge b-mapel">${esc(t.mapel)}</span>
+        <span class="badge b-mapel" style="color:var(--muted);border-color:var(--border)">${esc(t.jenis)}</span>
+        ${prioBadge(t.prio)}
+      </div>
+      ${deadlineTxt(t)}
+    </div>
+    <button class="del-btn" onclick="del(${t.id})" aria-label="Hapus">×</button>
+  </div>`;
+}
+ 
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+ 
+// Default date = hari ini
+document.getElementById('t-deadline').valueAsDate=new Date();
+ 
+// Today label
+(function(){
+  const d=new Date();
+  const days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  document.getElementById('today-badge').textContent=`${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+})();
+ 
+// Enter key
+document.getElementById('t-nama').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});
+ 
+// Seed data jika kosong
+if(!tasks.length){
+  const today=new Date().toISOString().slice(0,10);
+  const tom=new Date(Date.now()+864e5).toISOString().slice(0,10);
+  const lusa=new Date(Date.now()+2*864e5).toISOString().slice(0,10);
+  tasks=[
+    {id:1,nama:'Kerjakan soal latihan halaman 45–50',mapel:'Matematika',prio:'tinggi',jenis:'PR',deadline:today,done:false,created:Date.now()-3},
+    {id:2,nama:'Buat rangkuman bab Proklamasi Kemerdekaan',mapel:'Sejarah',prio:'sedang',jenis:'PR',deadline:tom,done:false,created:Date.now()-2},
+    {id:3,nama:'Persiapkan presentasi kelompok ekosistem',mapel:'Biologi',prio:'tinggi',jenis:'Presentasi',deadline:lusa,done:false,created:Date.now()-1},
+    {id:4,nama:'Baca modul Hukum Newton',mapel:'Fisika',prio:'rendah',jenis:'Baca',deadline:'',done:true,created:Date.now()},
+  ];
+  save();
+}
+ 
+render();
+</script>
+</body>
+</html>
