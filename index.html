@@ -399,7 +399,10 @@ if(!tasks.length){
   const tom=new Date(Date.now()+864e5).toISOString().slice(0,10);
   const lusa=new Date(Date.now()+2*864e5).toISOString().slice(0,10);
   tasks=[
-    
+    {id:1,nama:'Kerjakan soal latihan halaman 45–50',mapel:'Matematika',prio:'tinggi',jenis:'PR',deadline:today,done:false,created:Date.now()-3},
+    {id:2,nama:'Buat rangkuman bab Proklamasi Kemerdekaan',mapel:'Sejarah',prio:'sedang',jenis:'PR',deadline:tom,done:false,created:Date.now()-2},
+    {id:3,nama:'Persiapkan presentasi kelompok ekosistem',mapel:'Biologi',prio:'tinggi',jenis:'Presentasi',deadline:lusa,done:false,created:Date.now()-1},
+    {id:4,nama:'Baca modul Hukum Newton',mapel:'Fisika',prio:'rendah',jenis:'Baca',deadline:'',done:true,created:Date.now()},
   ];
   save();
 }
